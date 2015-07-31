@@ -1,6 +1,10 @@
 import json
+import random
+import time
 
-from flask import Flask, jsonify, request, Blueprint
+from threading import Thread
+
+from flask import Flask, jsonify, request, Blueprint, abort
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -20,17 +24,41 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+
+def use_cpu():
+    foo = 1
+    for x in xrange(10000, 20000):
+        foo *= x**3
+
+
+def use_memory():
+    def hold_memory():
+        foo = ' ' * 100000000
+        time.sleep(60)
+    Thread(target=hold_memory).start()
+
+
 @app.route('/')
 def user_list():
     users = []
     for u in User.query.all():
         users.append(dict(id=u.id, username=u.username, email=u.email))
+
     return jsonify(users=users)
+
 
 @app.route('/add', methods=['POST'])
 def add_user():
     username = request.form['username']
     email = request.form['email']
+
+    use_cpu()
+    use_memory()
+
+    q = db.session.query(User).filter(User.username == username)
+    if db.session.query(q.exists()).scalar():
+        abort(400)
+
     u = User(username, email)
     db.session.add(u)
     db.session.commit()
