@@ -8,7 +8,7 @@ from flask import Flask, jsonify, request, Blueprint, abort
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://acuros:test1234@test-db.c6adtqxdporu.ap-northeast-1.rds.amazonaws.com/acuros'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://[username]:[password]@[host]/[dbname]'
 db = SQLAlchemy(app)
 
 
