@@ -1,3 +1,4 @@
+import os
 import sys
 from app import app, db
 
@@ -12,6 +13,10 @@ if sys.argv[1] == 'initdb':
         raise e
     else:
         print 'Succeeded'
-elif sys.argv[1] == 'run':
+
+elif sys.argv[1] == 'debug':
     app.debug = True
     app.run(port=9338)
+
+elif sys.argv[1] == 'run':
+    os.system("gunicorn -c confs/gunicorn.ini app:app")
