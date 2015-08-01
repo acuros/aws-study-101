@@ -8,7 +8,7 @@ from flask import Flask, jsonify, request, Blueprint, abort
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://[username]:[password]@[host]/[dbname]'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://acuros:test1234@test-db.c6adtqxdporu.ap-northeast-1.rds.amazonaws.com/acuros'
 db = SQLAlchemy(app)
 
 
@@ -53,7 +53,6 @@ def add_user():
     email = request.form['email']
 
     use_cpu()
-    use_memory()
 
     q = db.session.query(User).filter(User.username == username)
     if db.session.query(q.exists()).scalar():
